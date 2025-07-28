@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>UPI Redirect</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f3f3f3;
+      color: #333;
+      text-align: center;
+      padding: 40px;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    a.button {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 12px 25px;
+      background: green;
+      color: white;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Redirecting to UPI App...</h2>
+    <p>If you're not redirected automatically, click the button below.</p>
+    <a id="upiLink" class="button" href="#">Pay via UPI</a>
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const upiLink = urlParams.get('link');
+
+    if (upiLink) {
+      document.getElementById('upiLink').href = upiLink;
+
+      // Try auto redirect after 1 second
+      setTimeout(() => {
+        window.location.href = upiLink;
+      }, 1000);
+    } else {
+      document.querySelector('h2').innerText = "No UPI link provided.";
+      document.querySelector('a.button').style.display = "none";
+    }
+  </script>
+</body>
+</html>
