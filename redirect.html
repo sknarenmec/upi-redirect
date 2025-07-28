@@ -1,58 +1,57 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>UPI Redirect</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UPI Payment Redirect</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f3f3f3;
-      color: #333;
+      font-family: 'Segoe UI', sans-serif;
       text-align: center;
       padding: 40px;
+      background: #f2f2f2;
     }
-    .container {
-      max-width: 600px;
-      margin: auto;
+    .qr-box {
       background: white;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    a.button {
+      padding: 20px;
       display: inline-block;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
       margin-top: 20px;
-      padding: 12px 25px;
-      background: green;
-      color: white;
-      border-radius: 6px;
-      text-decoration: none;
-      font-size: 16px;
+    }
+    .note {
+      margin-top: 15px;
+      color: #666;
+      font-size: 0.9rem;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2>Redirecting to UPI App...</h2>
-    <p>If you're not redirected automatically, click the button below.</p>
-    <a id="upiLink" class="button" href="#">Pay via UPI</a>
+  <h2>Redirecting to UPI Payment...</h2>
+  <div class="qr-box" id="qrContainer" style="display:none;">
+    <img id="qrImage" src="" alt="Scan to Pay via UPI" width="250" height="250" />
+    <div class="note">Scan this QR code using any UPI app</div>
   </div>
 
   <script>
     const urlParams = new URLSearchParams(window.location.search);
-    const upiLink = urlParams.get('link');
+    const upiLink = urlParams.get("link");
 
-    if (upiLink) {
-      document.getElementById('upiLink').href = upiLink;
-
-      // Try auto redirect after 1 second
-      setTimeout(() => {
-        window.location.href = upiLink;
-      }, 1000);
+    if (!upiLink) {
+      document.body.innerHTML = "<h2>❌ UPI link is missing in the URL.</h2>";
     } else {
-      document.querySelector('h2').innerText = "No UPI link provided.";
-      document.querySelector('a.button').style.display = "none";
+      const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+      if (isMobile) {
+        // Redirect to UPI app
+        window.location.href = upiLink;
+      } else {
+        // Show QR code on desktop
+        const safeLink = encodeURIComponent(upiLink);
+        const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${safeLink}`;
+        document.getElementById("qrImage").src = qrUrl;
+        document.getElementById("qrContainer").style.display = "block";
+      }
     }
   </script>
 </body>
