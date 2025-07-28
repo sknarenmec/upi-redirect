@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Redirecting to UPI App…</title>
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const upiLink = urlParams.get("link");
+
+    if (upiLink) {
+      window.location.href = decodeURIComponent(upiLink);
+    } else {
+      document.write("<h2>❌ Invalid UPI link.</h2>");
+    }
+  </script>
+</head>
+<body>
+  <h2>Redirecting to UPI App...</h2>
+  <p>If you are not redirected, click <a id="manualLink">here</a>.</p>
+  <script>
+    if (upiLink) {
+      document.getElementById("manualLink").href = decodeURIComponent(upiLink);
+    }
+  </script>
+</body>
+</html>
